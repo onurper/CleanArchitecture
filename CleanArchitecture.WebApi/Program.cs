@@ -1,8 +1,13 @@
+using CleanArchitecture.Application;
+using CleanArchitecture.Application.Services;
 using CleanArchitecture.Persistance.Context;
+using CleanArchitecture.Persistance.Services;
 using CleanArchitecture.Presentation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ICarService, CarService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -12,8 +17,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(AssemblyPresentationReference).Assembly);
 
-builder.Services.AddOpenApi();
+builder.Services.AddMediatR(conf =>
+{
+    conf.RegisterServicesFromAssembly(typeof(AssemblyApplicationReference).Assembly);
+});
 
+builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
