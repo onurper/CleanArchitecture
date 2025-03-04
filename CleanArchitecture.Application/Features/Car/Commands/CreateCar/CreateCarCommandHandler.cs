@@ -6,9 +6,9 @@ namespace CleanArchitecture.Application.Features.Car.Commands.CreateCar;
 
 public sealed class CreateCarCommandHandler(ICarService carService) : IRequestHandler<CreateCarCommand, MessageResponse>
 {
-    public Task<MessageResponse> Handle(CreateCarCommand request, CancellationToken cancellationToken)
+    public async Task<MessageResponse> Handle(CreateCarCommand request, CancellationToken cancellationToken)
     {
-        carService.CreateAsync(request, cancellationToken);
-        return Task.FromResult(new MessageResponse("Car created successfully"));
+        await carService.CreateAsync(request, cancellationToken);
+        return new MessageResponse("Car created successfully");
     }
 }
